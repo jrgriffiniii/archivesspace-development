@@ -10,11 +10,11 @@ docker-compose up
 
 ### Accessing the public user interface
 
-URL: [http://localhost/](http://localhost/)
+- URL: [http://localhost/](http://localhost/)
 
 ### Accessing the staff user interface
 
-URL: [http://localhost/staff/](http://localhost/staff/)
-user: `admin`
-password: `admin`
+- URL: [http://localhost/staff/](http://localhost/staff/)
+- user: `admin`
+- password: `admin`
 
