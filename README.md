@@ -1,4 +1,5 @@
 # ArchivesSpace Development
+[![CircleCI](https://circleci.com/gh/jrgriffiniii/archivesspace-development.svg?style=svg)](https://circleci.com/gh/jrgriffiniii/archivesspace-development)
 
 ## Getting Started
 
@@ -51,5 +52,26 @@ the files with the following:
 export PULFA_SERVER_URL=[the PULFA subversion URL]
 export PULFA_USERNAME=[the PULFA subversion username]
 svn checkout $PULFA_SERVER_URL --username $PULFA_USERNAME eads/pulfa/
+```
+
+### Cleaning the PULFA EAD Documents
+
+The following `rake` task ensures that cleaned EAD Documents can be imported into ArchivesSpace:
+```
+bundle exec rake pulfa:clean
+```
+
+## Development
+
+### Debugging
+
+First, please ensure that `ruby-debug-base` is installed:
+```
+% jruby -S gem install ruby-debug-base
+```
+
+Then, please use the following environment variable to invoke `rake` tasks:
+```
+% JRUBY_OPTS=--debug bundle exec rake pulfa:clean
 ```
 

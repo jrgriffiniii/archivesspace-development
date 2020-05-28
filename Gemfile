@@ -3,4 +3,7 @@ source "https://rubygems.org"
 
 ruby '2.5.7', engine: 'jruby', engine_version: '9.2.11.1'
 
+gem 'pry-debugger-jruby'
+gem 'nokogiri'
 gem 'rake'
+gem "ruby-debug"
