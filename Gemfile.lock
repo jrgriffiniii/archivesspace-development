@@ -1,0 +1,16 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rake (13.0.1)
+
+PLATFORMS
+  java
+
+DEPENDENCIES
+  rake
+
+RUBY VERSION
+   ruby 2.5.7p0 (jruby 9.2.11.1)
+
+BUNDLED WITH
+   2.1.4
