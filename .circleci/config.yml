@@ -16,8 +16,8 @@ jobs:
               git clone https://github.com/archivesspace/archivesspace.git
             fi
       - run:
-          name: Run the Docker Containers
-          command: docker-compose up
+          name: Lint the Docker Compose configuration
+          command: docker-compose config
       - save_cache:
           paths:
             - ~/archivesspace-development
