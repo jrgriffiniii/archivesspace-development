@@ -23,7 +23,39 @@ jobs:
             - ~/archivesspace-development
           key: circleci-archivesspace-development
 
+  jruby:
+    working_directory: ~/archivesspace-development
+    docker:
+      - image: circleci/jruby:9.2.11-jdk11-node-browsers-legacy
+    steps:
+      - setup_remote_docker
+      - checkout
+      - restore_cache:
+          name: Restore the bundler cache
+          keys:
+            - circleci-archivesspace-development
+            - archivesspace-development-{{ checksum "Gemfile.lock" }}
+      - run:
+          name: Retrieve the archivesspace source code
+          command: |
+            if [[ ! -d archivesspace ]]; then
+              git clone https://github.com/archivesspace/archivesspace.git
+            fi
+      - run:
+          name: Install the Gem dependencies
+          command: bundle install --path vendor/bundle
+      - save_cache:
+          name: Store the bundler cache
+          key: archivesspace-development-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+      - save_cache:
+          paths:
+            - ~/archivesspace-development
+          key: circleci-archivesspace-development
+
 workflows:
   docker:
     jobs:
       - docker_compose
+      - jruby
