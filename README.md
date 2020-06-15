@@ -3,9 +3,20 @@
 
 ## Prerequisites
 
-### macOS
+### Docker
+
+#### macOS
 
 [Please download Docker Desktop for Mac](https://docs.docker.com/docker-for-mac/)
+
+### MySQL
+
+#### macOS
+
+Please install the `mysql` client using [Homebrew](https://brew.sh/):
+```
+brew install mysql
+```
 
 ## Getting Started
 
@@ -101,7 +112,8 @@ Use the SQL export retrieved from above, please invoke the following:
 mysql -h 0.0.0.0 -P 3306 -u as -p archivesspace < export.sql
 ```
 
-(One will be prompted with `Enter password:`, please supply `as123`)
+(One will be prompted with `Enter password:`, please supply `as123`. Also, please 
+note that the import of the data takes some time [between 3-4 minutes], as the export can be quite large.)
 
 Now one should be able to connect to the database in the local environment using
 the following:
