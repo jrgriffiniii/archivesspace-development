@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  db:
+    image: mysql:5.7
+    command: --character-set-server=utf8 --innodb_buffer_pool_size=2G --innodb_buffer_pool_instances=2 --log_bin_trust_function_creators=1
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_DATABASE: archivesspace
+      MYSQL_USER: as
+      MYSQL_PASSWORD: as123
