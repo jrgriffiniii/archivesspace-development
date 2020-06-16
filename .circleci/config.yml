@@ -23,6 +23,29 @@ jobs:
             - ~/archivesspace-development
           key: circleci-archivesspace-development
 
+  docker_build:
+    working_directory: ~/archivesspace-development
+    docker:
+      - image: circleci/openjdk:11-jdk-buster-node-browsers-legacy
+    steps:
+      - setup_remote_docker
+      - checkout
+      - restore_cache:
+          key: circleci-archivesspace-development
+      - run:
+          name: Retrieve the archivesspace source code
+          command: |
+            if [[ ! -d archivesspace ]]; then
+              git clone https://github.com/archivesspace/archivesspace.git
+            fi
+      - run:
+          name: Build the Docker Image
+          command: docker build .
+      - save_cache:
+          paths:
+            - ~/archivesspace-development
+          key: circleci-archivesspace-development
+
   jruby:
     working_directory: ~/archivesspace-development
     docker:
@@ -58,4 +81,5 @@ workflows:
   docker:
     jobs:
       - docker_compose
+      - docker_build
       - jruby
