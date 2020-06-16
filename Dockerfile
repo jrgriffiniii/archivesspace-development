@@ -7,7 +7,10 @@ FROM ubuntu:18.04 as build_release
 # warning or presence in release notes.
 
 RUN DEBIAN_FRONTEND=noninteractive \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean && \
     apt-get update && \
+    apt-get update --fix-missing && \
     apt-get -y install --no-install-recommends \
       build-essential \
       git \
