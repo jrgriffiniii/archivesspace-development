@@ -1,5 +1,5 @@
 # ArchivesSpace Development
-[![CircleCI](https://circleci.com/gh/jrgriffiniii/archivesspace-development.svg?style=svg)](https://circleci.com/gh/jrgriffiniii/archivesspace-development)
+[![CircleCI](https://circleci.com/gh/pulibrary/archivesspace-development.svg?style=svg)](https://circleci.com/gh/pulibrary/archivesspace-development)
 
 ## Prerequisites
 
