@@ -20,10 +20,19 @@ brew install mysql
 
 ## Getting Started
 
+### Installing ArchivesSpace
+```
+source ./scripts/install_aspace.sh
+```
+
+### Installing the l10n/i18n Configurations
+```
+source ./scripts/install_locales.sh
+```
+
 ### Running the Docker Containers
 ```
-git clone https://github.com/archivesspace/archivesspace.git
-docker-compose up
+source ./scripts/docker_up.sh
 ```
 
 ### Accessing the public user interface
