@@ -22,19 +22,14 @@ repo = gets.chomp
 
 accessions_for_repo = 'repositories/'+repo+'/accessions'
 
-#get a count of ids
-count_accession_ids = client.get(accessions_for_repo, {
-  query: {
-    all_ids: true
-  }}).parsed.count
-
-#puts count_accession_ids
-
 #get all ids
 accession_ids = client.get(accessions_for_repo, {
   query: {
    all_ids: true
   }}).parsed
+
+  #get a count of ids
+  count_accession_ids = accession_ids.count
 
 #for each id, get the accession record and add to array of accession records
 results = []
@@ -49,46 +44,53 @@ while count_processed_records < count_accession_ids do
   count_processed_records = last_record
   end
 
-#test output
-#results[0].parsed[0]
-#puts results[0].parsed[0]['user_defined']['created_by']
-#puts results[0].parsed[0]['collection_management']['processing_plan']
-
 #iterate over accession record and write selected fields to csv
 filename = "repo"+repo+".csv"
 CSV.open(filename, "wb",
     :write_headers=> true,
-    :headers => ["id_0.id_1.id_2", "string_2", "disposition", "processing_plan"]) do |row|
+    :headers => ["uri", "id_0.id_1.id_2", "string_2", "disposition", "processing_plan", "related_resources"]) do |row|
 
   results.each do |result|
     result.parsed.each do |record|
-        callno =
-          unless record['user_defined'].nil?
-            then
-              unless record['user_defined']['string_2'].nil?
-              then record['user_defined']['string_2']
-              else ' '
+      uri =
+        unless record['uri'].nil?
+          then record['uri']
+        else ' '
+        end
+      related_resources = []
+            record['related_resources'].each do |resource|
+              resource.each do |key, value|
+                related_resources << value
               end
-          else ' '
-          end
-        processing_plan =
-         unless record['collection_management'].nil?
-           then
-            unless record['collection_management']['processing_plan'].nil?
-            then record['collection_management']['processing_plan']
+            end
+      related_resources = related_resources.join(', ')
+      callno =
+        unless record['user_defined'].nil?
+          then
+            unless record['user_defined']['string_2'].nil?
+            then record['user_defined']['string_2']
             else ' '
             end
+        else ' '
+        end
+      processing_plan =
+       unless record['collection_management'].nil?
+         then
+          unless record['collection_management']['processing_plan'].nil?
+          then record['collection_management']['processing_plan']
           else ' '
           end
-        disposition = record['disposition']
-        accession_id =
-          unless record['id_0'].nil?
-            then record['id_0'] +
-            unless record['id_1'].nil? then "." + record['id_1'] else ' ' end +
-            unless record['id_2'].nil? then "." + record['id_2'] else ' ' end
-          else ' '
-          end
-        row << [accession_id, callno, disposition, processing_plan]
-          end
+        else ' '
+        end
+      disposition = record['disposition']
+      accession_id =
+        unless record['id_0'].nil?
+          then record['id_0'] +
+          unless record['id_1'].nil? then "." + record['id_1'] else ' ' end +
+          unless record['id_2'].nil? then "." + record['id_2'] else ' ' end
+        else ' '
+        end
+      row << [uri, accession_id, callno, disposition, processing_plan, related_resources]
+        end
   end
 end
