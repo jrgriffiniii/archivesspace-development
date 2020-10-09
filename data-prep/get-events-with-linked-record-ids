@@ -1,0 +1,80 @@
+require 'archivesspace/client'
+require 'csv'
+require_relative 'sandbox_auth'
+
+#configure access
+config = ArchivesSpace::Configuration.new({
+  base_uri: "https://aspace.princeton.edu/staff/api",
+  base_repo: "",
+  username: @user,
+  password: @password,
+  #page_size: 50,
+  throttle: 0,
+  verify_ssl: false,
+})
+
+#log in
+client = ArchivesSpace::Client.new(config).login
+
+#get repo number
+puts "What repo? Type 5 for mss, 4 for ua, 3 for ppp."
+repo = gets.chomp
+
+#get accessions endpoint
+events_for_repo = 'repositories/'+repo+'/events'
+
+#get all ids
+event_ids = client.get(events_for_repo, {
+  query: {
+   all_ids: true
+  }}).parsed
+
+#get a count of ids
+count_event_ids = event_ids.count
+
+#for each id, get the accession record and add to array of accession records
+pages = []
+count_processed_records = 0
+while count_processed_records < count_event_ids do
+  last_record = [count_processed_records+249, count_event_ids].min
+  pages << client.get(events_for_repo, {
+          query: {
+            id_set: event_ids[count_processed_records..last_record]
+          }
+        })
+  count_processed_records = last_record
+end
+
+#look at a single record
+#puts results[0].parsed[0]
+
+#open csv
+filename = "events_repo"+repo+".csv"
+CSV.open(filename, "wb",
+    :write_headers=> true,
+    :headers => ["uri", "linked_record_uri", "linked_record_id"]) do |row|
+#iterate over event records and write selected fields to csv
+  pages.each do |page|
+    page.parsed.each do |record|
+      event_uri = record['uri']
+      linked_records = []
+      linked_record = {}
+        unless record['linked_records'].empty?
+        then
+          record['linked_records'].each do |link|
+              linked_record[link['ref']] = client.get(link['ref']).parsed['id_0']
+          end
+        else ' '
+        end
+      linked_records << linked_record
+      linked_records.each do |hash|
+        hash.each do |target_uri, id|
+        row << [event_uri, target_uri, id]
+        end
+      end
+#close record loop
+      end
+#close page loop
+  end
+#close csv
+end
