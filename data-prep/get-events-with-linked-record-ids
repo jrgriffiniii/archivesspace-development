@@ -48,33 +48,87 @@ end
 #look at a single record
 #puts results[0].parsed[0]
 
+
+#iterate over event records
+record_links = []
+  pages.each do |page|
+    page.parsed.each do |record|
+#get the current record's base_uri
+      event_uri = record['uri']
+#add hash of linked record uris to an array
+      #record_links = []
+      record_link = {}
+        unless record['linked_records'].empty?
+        then
+          record['linked_records'].each do |link|
+              record_link[event_uri] = link['ref']
+          end
+        else ' '
+        end
+      record_links << record_link
+#end page loop
+    end
+#end event record loop
+  end
+#test: get one record_link
+#puts record_links[0]
+
+#record_links gives us an array of hashes: event_uri_2_target_uri
+#add target uris to a separate array
+target_uris = []
+  record_links.each do |hash|
+    hash.each do |event_uri, target_uri|
+       target_uris << target_uri
+      end
+    end
+#dedupe list of linked record_links
+target_uris = target_uris.uniq!
+#test: get one target_uri
+# puts target_uris[0]
+
+#for each distinct linked record, add the entire record to an array
+linked_records = []
+  target_uris.each do |target_uri|
+    linked_records << client.get(target_uri).parsed
+  end
+#test: get one linked_record
+#puts linked_records[0]
+
 #open csv
 filename = "events_repo"+repo+".csv"
 CSV.open(filename, "wb",
     :write_headers=> true,
-    :headers => ["uri", "linked_record_uri", "linked_record_id"]) do |row|
-#iterate over event records and write selected fields to csv
-  pages.each do |page|
-    page.parsed.each do |record|
-      event_uri = record['uri']
-      linked_records = []
-      linked_record = {}
-        unless record['linked_records'].empty?
-        then
-          record['linked_records'].each do |link|
-              linked_record[link['ref']] = client.get(link['ref']).parsed['id_0']
-          end
-        else ' '
-        end
-      linked_records << linked_record
-      linked_records.each do |hash|
-        hash.each do |target_uri, id|
-        row << [event_uri, target_uri, id]
-        end
+    :headers => ["uri", "linked_record_uri", "linked_record_id_0-1-2"]) do |row|
+
+#for each event uri, get target_uri and id of linked records
+record_links.each do |hash|
+  hash.each do |event_uri, target_uri|
+     linked_records.each do |linked_record|
+       if linked_record['uri'] == target_uri
+       then
+          linked_record_uri = linked_record['uri']
+          linked_record_id = unless linked_record['id_0'].nil?
+                             then linked_record['id_0'] +
+                              unless linked_record['id_1'].nil?
+                              then '.' + linked_record['id_1'] +
+                                unless linked_record['id_2'].nil?
+                                then '.' + linked_record['id_2']
+                                else ''
+                                end
+                              else ''
+                              end
+                            else ''
+                            end
+       row << [event_uri, linked_record_uri, linked_record_id]
+      #test that target_uri = linked_record['uri']
+      #target_uri + ' ' +
+       else ''
+       end
+#end linked_record loop
       end
-#close record loop
-      end
-#close page loop
-  end
+#end has loop
+     end
+#end record_links loop
+    end
 #close csv
-end
+  end
