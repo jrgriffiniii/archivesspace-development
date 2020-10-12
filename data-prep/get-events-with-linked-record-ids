@@ -32,7 +32,7 @@ event_ids = client.get(events_for_repo, {
 #get a count of ids
 count_event_ids = event_ids.count
 
-#for each id, get the accession record and add to array of accession records
+#for each id, get the event record and add to array of event records
 pages = []
 count_processed_records = 0
 while count_processed_records < count_event_ids do
@@ -47,7 +47,6 @@ end
 
 #look at a single record
 #puts results[0].parsed[0]
-
 
 #iterate over event records
 record_links = []
