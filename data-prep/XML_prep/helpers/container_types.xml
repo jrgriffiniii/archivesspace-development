@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classic-containers>
+	<attribute>container-type</attribute>
+</classic-containers>
+<retrieval-containers>
+	<attribute>container-type</attribute>
+	<attribute>barcode</attribute>
+	<attribute>item-id</attribute>
+	<attribute>physloc-code</attribute>
+	<attribute>physloc-text</attribute>
+</retrieval-containers>
+<subordinate-containers>
+	<attribute>container-type</attribute>
+	<attribute>parent-barcode</attribute>
+	<attribute>parent-item-id</attribute>
+	<attribute>parent-container-type</attribute>
+	<attribute>parent-container-number</attribute>
+</subordinate-containers>
+<classic-unitids>
+	<attribute>unitid-type</attribute>
+</classic-unitids>
+<retrieval-unitids>
+	<attribute>unitid-type</attribute>
+	<attribute>container-type</attribute>
+	<attribute>barcode</attribute>
+	<attribute>item-id</attribute>
+	<attribute>physloc-code</attribute>
+	<attribute>physloc-text</attribute>
+</retrieval-unitids>

@@ -1,0 +1,57 @@
+<did count="650">
+   <type>box</type>
+   <type>reel</type>
+</did>
+<did count="605">
+   <type>volume</type>
+   <type>folio</type>
+</did>
+<did count="412">
+   <type>case</type>
+   <type>box</type>
+</did>
+<did count="368">
+   <type>box</type>
+   <type>case</type>
+</did>
+<did count="246">
+   <type>box</type>
+   <type>item</type>
+</did>
+<did count="150">
+   <type>portfolio</type>
+   <type>packet</type>
+</did>
+<did count="148">
+   <type>box</type>
+   <type>cassette</type>
+</did>
+<did count="63">
+   <type>box</type>
+   <type>file</type>
+</did>
+<did count="22">
+   <type>box</type>
+   <type>tape</type>
+</did>
+<did count="4">
+   <type>box</type>
+   <type>volume</type>
+</did>
+<did count="2">
+   <type>box</type>
+   <type>binder</type>
+</did>
+<did count="1">
+   <type>box</type>
+   <type>folders</type>
+</did>
+<did count="1">
+   <type>bin</type>
+   <type>folder</type>
+</did>
+<did count="1">
+   <type>box</type>
+   <type>folder</type>
+   <type>folder</type>
+</did>
