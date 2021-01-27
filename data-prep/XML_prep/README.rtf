@@ -5,25 +5,21 @@
 \margl1440\margr1440\vieww10800\viewh8400\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\fs24 \cf0 copy to ASpace directory: copy-eads.xq and revert (1.5 mins)\
+\f0\fs24 \cf0 copy to ASpace directory: copy-eads.xq\
 \
 \
 1. Create container entities from dsc2 and classic containers: \
-svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/get-containers.xquery (1min)\
-svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/classic_2_dsc2_containers.xq (1 min)\
+svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/get-containers.xquery\
+svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/classic_2_dsc2_containers.xq\
 \
-2. Merge classics into top_containers manually\'97this is a pain, but merging programmatically takes forever\
+2. Transform EADs: \
+svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/ASpace_do_containers.xq\
+svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/ASpace_do_cleanup.xq\
 \
-3. Transform EADs: \
-svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/ASpace_do_containers.xq (3 min)\
-svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/ASpace_do_cleanup.xq (3 min for mss, 3 min for univarchives, 2 min for public policy. 1 min for rarebooks, but will not run on the Derrida files\'97did those by hand)\
+3. MUST run after EAD transformation: Extract Agents names_A-F and names_G-Z with get-agent-info-and-delete.xq and delete names, bioghists from EAD;\
+Remove empty elements with remove-empty-agent-wrappers.xq\
 \
-4. MUST run after EAD transformation: Extract Agents names_A-F (current status) with get-agent-info-and-delete.xq and delete names, bioghists from EAD (12 mins)\
+4. Create CSV from names_A-F, names_G-Z using names2csv.xq (1s)\
 \
-5. Create CSV from names_A-F using names2csv.xq (1s)\
-\
-6. Validate: svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/validate.xquery (5 min), \
-svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/validate-containers.xquery\
-\
-\
-Fix accordingly\'97some things can be addressed using tools in the same directory.}
+5. Validate: svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/validate.xquery (5 min), \
+svn://lib-svn.princeton.edu/libsvn/trunk/rbscXSL/ASpace tools/validate-containers.xquery}
