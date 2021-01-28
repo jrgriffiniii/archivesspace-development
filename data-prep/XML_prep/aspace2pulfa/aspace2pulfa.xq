@@ -1,4 +1,4 @@
-xquery version "3.0";
+xquery version "3.1";
 declare namespace ead = "urn:isbn:1-931666-22-9";
 declare namespace xlink = "http://www.w3.org/1999/xlink";
 
@@ -7,7 +7,13 @@ declare copy-namespaces no-preserve, inherit;
 import module namespace functx = "http://www.functx.com"
 at "http://www.xqueryfunctions.com/xq/functx-1.0-doc-2007-01.xq";
 
-declare variable $eads as document-node()* := collection("file:/Users/heberleinr/Documents/SVN_Working_Copies/trunk/rbscXSL/ASpace%20tools/aspace2pulfa/aspace_export")/doc(document-uri(.));
+(:declare variable $eads as document-node()* := collection("file:/Users/heberleinr/Documents/pulfalight/spec/fixtures/aspace/generated?select=*.xml;recurse=yes")/doc(document-uri(.));
+:)
+(:declare variable $eads as document-node()* := doc("file:/Users/heberleinr/Documents/SVN_Working_Copies/trunk/rbscXSL/ASpace%20tools/aspace2pulfa/aspace_export/MC085.aspace.xml");
+:)
+declare variable $eads as document-node()* := collection("file:/Users/heberleinr/Documents/SVN_Working_Copies/trunk/rbscXSL/ASpace_tools/aspace2pulfa/aspace_export?select=*.xml;recurse=yes")/doc(document-uri(.));
+
+(:delete langmaterial/language/text(); add address/@id:)
 
 for $ead in $eads
 let $aspace_ids := $ead//@id[starts-with(., 'aspace')]
@@ -30,6 +36,9 @@ let $dacs4 := $ead//ead:archdesc/(ead:accessrestrict | ead:userestrict | ead:oth
 let $dacs5 := $ead//ead:archdesc/(ead:acqinfo | ead:appraisal | ead:custodhist | ead:accruals)
 let $dacs6 := $ead//ead:archdesc/(ead:originalsloc | ead:altformavail | ead:bibliography | ead:relatedmaterial)
 let $dacs7 := $ead//ead:archdesc/(ead:prefercite | ead:processinfo)
+let $daodescs := $ead//ead:daodesc
+let $langmaterial := $ead//ead:langmaterial
+let $coll-physlocs := $ead//ead:archdesc/ead:did/ead:physloc
 
 return
 (
@@ -67,6 +76,24 @@ for $repository in $ead//ead:archdesc/ead:did/ead:repository[matches(normalize-s
 return insert node attribute id {'ga'} into $repository,
 for $repository in $ead//ead:archdesc/ead:did/ead:repository[matches(normalize-space(string(.)), 'East Asian Collection', 'i')]
 return insert node attribute id {'ea'} into $repository,
+
+for $language in $langmaterial/ead:language/text()
+return
+delete node $language,
+
+for $daodesc in $daodescs
+return
+delete node $daodesc,
+
+for $physloc in $coll-physlocs
+return
+(
+if(matches($physloc/text(), '^(anxb|ea|ex|flm|flmp|gax|hsvc|hsvm|mss|mudd|prnc|rarebooks|rcpph|rcppf|rcppl|rcpxc|rcpxg|rcpxm|rcpxr|st|thx|wa|review|oo|sc|sls)$', 'i'))
+then
+	insert node attribute type {"code"} into $physloc
+else
+	insert node attribute type {"text"} into $physloc
+),
 
 if($dacs3)
 then
