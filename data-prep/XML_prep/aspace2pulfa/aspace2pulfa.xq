@@ -9,14 +9,14 @@ at "http://www.xqueryfunctions.com/xq/functx-1.0-doc-2007-01.xq";
 
 (:declare variable $eads as document-node()* := collection("file:/Users/heberleinr/Documents/pulfalight/spec/fixtures/aspace/generated?select=*.xml;recurse=yes")/doc(document-uri(.));
 :)
-(:declare variable $eads as document-node()* := doc("file:/Users/heberleinr/Documents/SVN_Working_Copies/trunk/rbscXSL/ASpace%20tools/aspace2pulfa/aspace_export/MC085.aspace.xml");
+(:declare variable $eads as document-node()* := doc("file:/Users/heberleinr/Documents/SVN_Working_Copies/trunk/rbscXSL/ASpace_tools/aspace2pulfa/aspace_export/MC085.EAD.xml");
 :)
 declare variable $eads as document-node()* := collection("file:/Users/heberleinr/Documents/SVN_Working_Copies/trunk/rbscXSL/ASpace_tools/aspace2pulfa/aspace_export?select=*.xml;recurse=yes")/doc(document-uri(.));
 
 (:delete langmaterial/language/text(); add address/@id:)
 
 for $ead in $eads
-let $aspace_ids := $ead//@id[starts-with(., 'aspace')]
+let $aspace-ids := $ead//@id[starts-with(., 'aspace')]
 let $child_containers := $ead//ead:c//ead:container[@parent]
 let $top_containers := 
 	for $container in $ead//ead:c//ead:container[@label]
@@ -40,11 +40,14 @@ let $daodescs := $ead//ead:daodesc
 let $langmaterial := $ead//ead:langmaterial
 let $coll-physlocs := $ead//ead:archdesc/ead:did/ead:physloc
 
+
 return
 (
-for $aspace_id in $aspace_ids
+for $aspace-id in $aspace-ids
 return
-delete node $aspace_id,
+if($aspace-id/parent::ead:c)
+then replace value of node $aspace-id with replace($aspace-id, 'aspace_', '')
+else delete node $aspace-id,
 
 for $num in $ead//ead:titleproper/ead:num 
 return
@@ -173,13 +176,6 @@ else(),
 for $dsc1 in $ead//ead:dsc[1]
 return
 insert node attribute type {'combined'} into $dsc1,
-
-for $component at $pos in $ead//ead:dsc[1]//ead:c
-return 
-(
-delete node $component/@id,
-insert node attribute id {$ead//ead:eadid || '_c' || functx:pad-integer-to-length($pos, 4)} into $component
-),
 
 for $head in $ead//ead:head
 return
