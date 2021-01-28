@@ -1,4 +1,7 @@
 Before running, edit variable $eads in aspace2pulfa.xq.
 
+requires basex 
+
 Call with
-java -cp "path/to/saxon9ee.jar" net.sf.saxon.Query -update:on -t -q:"path/to/aspace2pulfa.xq" 
+basex -uVw -somit-xml-declaration=no -smethod=xml "path/to/aspace2pulfa.xq"
+
