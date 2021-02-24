@@ -9,13 +9,14 @@ at "http://www.xqueryfunctions.com/xq/functx-1.0-doc-2007-01.xq";
 
 (:declare variable $eads as document-node()* := collection("file:/Users/heberleinr/Documents/pulfalight/spec/fixtures/aspace/generated?select=*.xml;recurse=yes")/doc(document-uri(.));
 :)
-(:declare variable $eads as document-node()* := doc("file:/Users/heberleinr/Documents/SVN_Working_Copies/trunk/rbscXSL/ASpace_tools/aspace2pulfa/aspace_export/MC085.EAD.xml");
-:)
-declare variable $eads as document-node()* := collection("file:/Users/heberleinr/Documents/SVN_Working_Copies/trunk/rbscXSL/ASpace_tools/aspace2pulfa/aspace_export?select=*.xml;recurse=yes")/doc(document-uri(.));
+declare variable $eads as document-node()* := doc("file:/Users/heberleinr/Downloads/C1553_20210224_191523_UTC__ead.xml");
+
+(:declare variable $eads as document-node()* := collection("file:/Users/heberleinr/Documents/SVN_Working_Copies/trunk/rbscXSL/ASpace_tools/aspace2pulfa/aspace_export?select=*.xml;recurse=yes")/doc(document-uri(.));:)
 
 (:delete langmaterial/language/text(); add address/@id:)
 
 for $ead in $eads
+let $source-atts := $ead//@source
 let $aspace-ids := $ead//@id[starts-with(., 'aspace')]
 let $child_containers := $ead//ead:c//ead:container[@parent]
 let $top_containers := 
@@ -43,6 +44,12 @@ let $coll-physlocs := $ead//ead:archdesc/ead:did/ead:physloc
 
 return
 (
+for $source-att in $source-atts
+return
+if (matches($source-att, '^virtual international authority file$', 'i'))
+then replace value of node $source-att with replace($source-att, 'virtual international authority file', 'viaf')
+else(),
+
 for $aspace-id in $aspace-ids
 return
 if($aspace-id/parent::ead:c)
