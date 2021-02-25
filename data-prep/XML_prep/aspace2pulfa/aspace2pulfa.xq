@@ -7,14 +7,17 @@ declare copy-namespaces no-preserve, inherit;
 import module namespace functx = "http://www.functx.com"
 at "http://www.xqueryfunctions.com/xq/functx-1.0-doc-2007-01.xq";
 
+(:use this to point to a directory:)
 (:declare variable $eads as document-node()* := collection("file:/Users/heberleinr/Documents/pulfalight/spec/fixtures/aspace/generated?select=*.xml;recurse=yes")/doc(document-uri(.));
 :)
-declare variable $eads as document-node()* := doc("file:/Users/heberleinr/Downloads/C1553_20210224_191523_UTC__ead.xml");
-
-(:declare variable $eads as document-node()* := collection("file:/Users/heberleinr/Documents/SVN_Working_Copies/trunk/rbscXSL/ASpace_tools/aspace2pulfa/aspace_export?select=*.xml;recurse=yes")/doc(document-uri(.));:)
-
-(:delete langmaterial/language/text(); add address/@id:)
-
+(:use this to point to a single file:)
+declare variable $eads as document-node()* := doc("file:/Users/heberleinr/Downloads/C1667_20210225_134434_UTC__ead.xml");
+(:use this to point to a few single files:)
+(:declare variable $eads as document-node()* := (
+	doc("file:/Users/heberleinr/Downloads/C1667_20210225_134434_UTC__ead.xml"),
+	doc("file:/Users/heberleinr/Downloads/C1668__ead.xml")
+);
+:)
 for $ead in $eads
 let $source-atts := $ead//@source
 let $aspace-ids := $ead//@id[starts-with(., 'aspace')]
